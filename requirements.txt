@@ -1,6 +1,5 @@
 streamlit
 streamlit_authenticator
-datetime
 pandas
 calendar
 xlsxwriter
