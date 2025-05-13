@@ -1,6 +1,6 @@
-streamlit
-streamlit_authenticator
-pandas
-calendar
+streamlit==1.45.1
+streamlit_authenticator==0.4.2
+pandas==2.2.3
+datetime
 xlsxwriter
 os
