@@ -274,3 +274,169 @@ Traceback (most recent call last):
 NameError: name 'df_mois' is not defined
   Stopping...
   Stopping...
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.0.154:8501
+
+2025-05-22 16:52:06.958 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 234, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+2025-05-22 16:52:40.777 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 234, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+2025-05-22 16:55:42.687 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 234, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8502
+  Network URL: http://192.168.0.154:8502
+
+/home/poinseaux/Documents/projet_code/babyapp/app.py:101: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value '17:37' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  duree = t2 - t1 if t2 > t1 else (t2 + timedelta(days=1) - t1)
+/home/poinseaux/Documents/projet_code/babyapp/app.py:106: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value '1 day, 0:00:00' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  st.success(f"Départ enregistré à {heure_depart}")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:119: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": datetime.now(), "observation": remarque}])], ignore_index=True)
+2025-05-22 17:37:24.812 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 241, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+/home/poinseaux/Documents/projet_code/babyapp/app.py:240: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:240: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:240: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:240: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+2025-05-22 17:40:35.538 Script compilation error
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 549, in _run_script
+    code = self._script_cache.get_bytecode(script_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_cache.py", line 72, in get_bytecode
+    filebody = magic.add_magic(filebody, script_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/magic.py", line 46, in add_magic
+    tree = ast.parse(code, script_path, "exec")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ast.py", line 52, in parse
+    return compile(source, filename, mode, flags,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 121
+    df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M") "observation": remarque}])], ignore_index=True)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+2025-05-22 17:40:35.576 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-05-22 17:40:58.070 Script compilation error
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 549, in _run_script
+    code = self._script_cache.get_bytecode(script_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_cache.py", line 72, in get_bytecode
+    filebody = magic.add_magic(filebody, script_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/magic.py", line 46, in add_magic
+    tree = ast.parse(code, script_path, "exec")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ast.py", line 52, in parse
+    return compile(source, filename, mode, flags,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 121
+    df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M") "observation": remarque}])], ignore_index=True)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+2025-05-22 17:40:58.071 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-05-22 17:41:02.347 Script compilation error
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 549, in _run_script
+    code = self._script_cache.get_bytecode(script_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_cache.py", line 72, in get_bytecode
+    filebody = magic.add_magic(filebody, script_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/magic.py", line 46, in add_magic
+    tree = ast.parse(code, script_path, "exec")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ast.py", line 52, in parse
+    return compile(source, filename, mode, flags,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 121
+    df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M") "observation": remarque}])], ignore_index=True)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+2025-05-22 17:41:02.348 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-05-22 17:41:36.722 Received event for non-watched file: /home/poinseaux/Documents/projet_code/babyapp/app.py
+2025-05-22 17:41:55.255 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 241, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+2025-05-22 17:42:24.750 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 241, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'

@@ -106,6 +106,8 @@ if st.session_state.get('authentication_status'):
                     df_presence.at[idx, "Durée"] = duree
                 except Exception as e:
                     st.error(f"Erreur de calcul : {e}")
+                df_presence["Départ"] = df_presence["Départ"].astype(str)
+                df_presence["Durée"] = df_presence["Durée"].astype(str)
                 df_presence.to_csv(fichier_presence, index=False)
                 st.success(f"Départ enregistré à {heure_depart}")
             else:
@@ -114,21 +116,26 @@ if st.session_state.get('authentication_status'):
         remarque = st.text_input("Observation", key="repas_remarque")
         col1, col2, col3, col4, col5 = st.columns(5)
         if col1.button("🍲 Repas"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": datetime.now(), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
         if col2.button("📄 Début sieste"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now(), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
         if col3.button("🌞 Fin sieste"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Fin Sieste", "Heure": datetime.now(), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Fin Sieste", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
         if col4.button("🧷 Change"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": datetime.now(), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
         if col5.button("🍎 Goûter"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": datetime.now(), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
 
         df.to_csv(fichier, index=False)
 
         st.subheader("📜 Historique du jour")
-        df["Heure"] = pd.to_datetime(df["Heure"])
+        try:
+            df["Heure"] = pd.to_datetime(df["Heure"], errors="coerce", dayfirst=False)
+        except Exception as e:
+            st.error(f"Erreur de conversion des dates : {e}")
+
         df["Heure"] = df["Heure"].dt.strftime("%d/%m/%Y %H:%M")
+
         st.dataframe(df.sort_values(by="Heure", ascending=False))
 
         st.subheader("🗘️ Besoins de la journée")
@@ -138,7 +145,7 @@ if st.session_state.get('authentication_status'):
                 df = pd.concat([df, pd.DataFrame([{
                     "Nom": nom,
                     "Activité": "Besoins",
-                    "Heure": datetime.now().strftime("%m/%d/%Y %H:%M"),
+                    "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"),
                     "observation": besoins
                 }])], ignore_index=True)
                 df.to_csv(fichier, index=False)
@@ -153,7 +160,7 @@ if st.session_state.get('authentication_status'):
         if st.button("📦 Générer le fichier Excel du mois"):
             if os.path.exists(fichier_presence):
                 df_presence = pd.read_csv(fichier_presence)
-                df_presence["Date"] = pd.to_datetime(df_presence["Date"])
+                df_presence["Date"] = pd.to_datetime(df_presence["Date"], errors="coerce")
                 df_presence["Durée"] = pd.to_timedelta(df_presence["Durée"], errors="coerce")
                 df_presence["Durée_excel"] = df_presence["Durée"].dt.total_seconds() / 86400
                 filtre = (df_presence["Date"].dt.month == mois) & (df_presence["Date"].dt.year == annee)
@@ -208,7 +215,7 @@ if st.session_state.get('authentication_status'):
     elif role == "Parent":
         enfant = parent_enfants.get(name)
         st.subheader(f"📜 Historique de {enfant}")
-        df["Heure"] = pd.to_datetime(df["Heure"])
+        df["Heure"] = pd.to_datetime(df["Heure"], format="%Y-%m-%d %H:%M", errors="coerce")
         df_enfant = df[df["Nom"] == enfant]
         df_presence["Date"] = pd.to_datetime(df_presence["Date"])
         df_now = df_presence[df_presence["Nom"] == enfant]
