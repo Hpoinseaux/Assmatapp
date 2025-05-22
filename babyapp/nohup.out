@@ -1,0 +1,276 @@
+2025-05-08 15:32:46.246 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 212, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+2025-05-08 15:32:50.352 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 212, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+/home/poinseaux/Documents/projet_code/babyapp/app.py:117: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": datetime.now(), "observation": remarque}])], ignore_index=True)
+2025-05-08 15:34:01.710 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 189, in <module>
+    df["Heure"] = pd.to_datetime(df["Heure"])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 1067, in to_datetime
+    values = convert_listlike(arg._values, format)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 433, in _convert_listlike_datetimes
+    return _array_strptime_with_fallback(arg, name, utc, format, exact, errors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 467, in _array_strptime_with_fallback
+    result, tz_out = array_strptime(arg, fmt, exact=exact, errors=errors, utc=utc)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "strptime.pyx", line 501, in pandas._libs.tslibs.strptime.array_strptime
+  File "strptime.pyx", line 451, in pandas._libs.tslibs.strptime.array_strptime
+  File "strptime.pyx", line 583, in pandas._libs.tslibs.strptime._parse_with_format
+ValueError: time data "2025-05-08 15:33:57.248294" doesn't match format "%m/%d/%Y %H:%M", at position 5. You might want to try:
+    - passing `format` if your strings have a consistent format;
+    - passing `format='ISO8601'` if your strings are all ISO8601 but not necessarily in exactly the same format;
+    - passing `format='mixed'`, and the format will be inferred for each element individually. You might want to use `dayfirst` alongside this.
+2025-05-08 15:42:28.458 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 130, in <module>
+    df["Heure"] = pd.to_datetime(df["Heure"])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 1067, in to_datetime
+    values = convert_listlike(arg._values, format)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 433, in _convert_listlike_datetimes
+    return _array_strptime_with_fallback(arg, name, utc, format, exact, errors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 467, in _array_strptime_with_fallback
+    result, tz_out = array_strptime(arg, fmt, exact=exact, errors=errors, utc=utc)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "strptime.pyx", line 501, in pandas._libs.tslibs.strptime.array_strptime
+  File "strptime.pyx", line 451, in pandas._libs.tslibs.strptime.array_strptime
+  File "strptime.pyx", line 583, in pandas._libs.tslibs.strptime._parse_with_format
+ValueError: time data "2025-05-08 15:33:57.248294" doesn't match format "%m/%d/%Y %H:%M", at position 5. You might want to try:
+    - passing `format` if your strings have a consistent format;
+    - passing `format='ISO8601'` if your strings are all ISO8601 but not necessarily in exactly the same format;
+    - passing `format='mixed'`, and the format will be inferred for each element individually. You might want to use `dayfirst` alongside this.
+2025-05-08 15:42:29.477 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 130, in <module>
+    df["Heure"] = pd.to_datetime(df["Heure"])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 1067, in to_datetime
+    values = convert_listlike(arg._values, format)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 433, in _convert_listlike_datetimes
+    return _array_strptime_with_fallback(arg, name, utc, format, exact, errors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 467, in _array_strptime_with_fallback
+    result, tz_out = array_strptime(arg, fmt, exact=exact, errors=errors, utc=utc)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "strptime.pyx", line 501, in pandas._libs.tslibs.strptime.array_strptime
+  File "strptime.pyx", line 451, in pandas._libs.tslibs.strptime.array_strptime
+  File "strptime.pyx", line 583, in pandas._libs.tslibs.strptime._parse_with_format
+ValueError: time data "2025-05-08 15:33:57.248294" doesn't match format "%m/%d/%Y %H:%M", at position 5. You might want to try:
+    - passing `format` if your strings have a consistent format;
+    - passing `format='ISO8601'` if your strings are all ISO8601 but not necessarily in exactly the same format;
+    - passing `format='mixed'`, and the format will be inferred for each element individually. You might want to use `dayfirst` alongside this.
+2025-05-08 15:42:30.379 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 130, in <module>
+    df["Heure"] = pd.to_datetime(df["Heure"])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 1067, in to_datetime
+    values = convert_listlike(arg._values, format)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 433, in _convert_listlike_datetimes
+    return _array_strptime_with_fallback(arg, name, utc, format, exact, errors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/pandas/core/tools/datetimes.py", line 467, in _array_strptime_with_fallback
+    result, tz_out = array_strptime(arg, fmt, exact=exact, errors=errors, utc=utc)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "strptime.pyx", line 501, in pandas._libs.tslibs.strptime.array_strptime
+  File "strptime.pyx", line 451, in pandas._libs.tslibs.strptime.array_strptime
+  File "strptime.pyx", line 583, in pandas._libs.tslibs.strptime._parse_with_format
+ValueError: time data "2025-05-08 15:33:57.248294" doesn't match format "%m/%d/%Y %H:%M", at position 5. You might want to try:
+    - passing `format` if your strings have a consistent format;
+    - passing `format='ISO8601'` if your strings are all ISO8601 but not necessarily in exactly the same format;
+    - passing `format='mixed'`, and the format will be inferred for each element individually. You might want to use `dayfirst` alongside this.
+2025-05-08 15:43:05.585 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 212, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+/home/poinseaux/Documents/projet_code/babyapp/app.py:211: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:211: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:211: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:211: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:211: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+/home/poinseaux/Documents/projet_code/babyapp/app.py:211: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
+2025-05-08 15:54:04.402 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 212, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+/home/poinseaux/Documents/projet_code/babyapp/app.py:101: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value '15:54' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  df_presence.at[idx, "Départ"] = heure_depart
+/home/poinseaux/Documents/projet_code/babyapp/app.py:106: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value '0:21:00' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  df_presence.at[idx, "Durée"] = duree
+2025-05-08 15:54:51.675 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 212, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+2025-05-08 15:55:37.334 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 212, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+2025-05-08 16:00:14.791 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 212, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+2025-05-08 16:02:02.758 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 212, in <module>
+    st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+2025-05-08 16:15:49.820 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 185, in <module>
+    worksheet.write(row_idx, 3, feuille_export.iloc[row_idx - 1]["Durée"], format_duree)
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/xlsxwriter/worksheet.py", line 108, in cell_wrapper
+    return method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/xlsxwriter/worksheet.py", line 481, in write
+    return self._write(row, col, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/xlsxwriter/worksheet.py", line 547, in _write
+    return self._write_datetime(row, col, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/xlsxwriter/worksheet.py", line 1143, in _write_datetime
+    number = self._convert_date_time(date)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/xlsxwriter/worksheet.py", line 4905, in _convert_date_time
+    return _datetime_to_excel_datetime(dt_obj, self.date_1904, self.remove_timezone)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/xlsxwriter/utility.py", line 949, in _datetime_to_excel_datetime
+    if isinstance(date_type, datetime.datetime) and dt_obj.isocalendar() == (
+                                                    ^^^^^^^^^^^^^^^^^^^^
+  File "nattype.pyx", line 54, in pandas._libs.tslibs.nattype._make_error_func.f
+ValueError: NaTType does not support isocalendar
+2025-05-08 16:26:13.200 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 157, in <module>
+    df_mois["Durée"] = pd.to_timedelta(df_mois["Durée"], errors="coerce")
+                                       ^^^^^^^
+NameError: name 'df_mois' is not defined
+  Stopping...
+  Stopping...
