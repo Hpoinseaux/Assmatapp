@@ -440,3 +440,4 @@ Traceback (most recent call last):
     st.write(f"🗓️ Activités du {date_selectionnee.strftime('%d/%m/%Y')}")
                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'NoneType' object has no attribute 'strftime'
+  Stopping...
