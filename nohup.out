@@ -1,0 +1,37 @@
+/home/poinseaux/Documents/projet_code/babyapp/app.py:224: UserWarning: Parsing dates in %d/%m/%Y format when dayfirst=False (the default) was specified. Pass `dayfirst=True` or specify a format to silence this warning.
+  date_selectionnee = st.selectbox("Choisir une date :", dates_disponibles)
+2025-05-30 12:09:45.520 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 252, in <module>
+    enfant_folder = os.path.join(dossier_photos, enfant)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen posixpath>", line 90, in join
+  File "<frozen genericpath>", line 164, in _check_arg_types
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'NoneType'
+/home/poinseaux/Documents/projet_code/babyapp/app.py:224: UserWarning: Parsing dates in %d/%m/%Y format when dayfirst=False (the default) was specified. Pass `dayfirst=True` or specify a format to silence this warning.
+  df_presence["Date"] = pd.to_datetime(df_presence["Date"])
+/home/poinseaux/Documents/projet_code/babyapp/app.py:224: UserWarning: Parsing dates in %d/%m/%Y format when dayfirst=False (the default) was specified. Pass `dayfirst=True` or specify a format to silence this warning.
+  df_presence["Date"] = pd.to_datetime(df_presence["Date"])
+/home/poinseaux/Documents/projet_code/babyapp/app.py:224: UserWarning: Parsing dates in %d/%m/%Y format when dayfirst=False (the default) was specified. Pass `dayfirst=True` or specify a format to silence this warning.
+  df_presence["Date"] = pd.to_datetime(df_presence["Date"])
+/home/poinseaux/Documents/projet_code/babyapp/app.py:224: UserWarning: Parsing dates in %d/%m/%Y format when dayfirst=False (the default) was specified. Pass `dayfirst=True` or specify a format to silence this warning.
+  df_presence["Date"] = pd.to_datetime(df_presence["Date"])
+2025-05-30 12:10:26.011 Uncaught app execution
+Traceback (most recent call last):
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+  File "/home/poinseaux/venv/lib/python3.12/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 640, in code_to_exec
+    exec(code, module.__dict__)
+  File "/home/poinseaux/Documents/projet_code/babyapp/app.py", line 252, in <module>
+    enfant_folder = os.path.join(dossier_photos, enfant)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen posixpath>", line 90, in join
+  File "<frozen genericpath>", line 164, in _check_arg_types
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'NoneType'
+  Stopping...
