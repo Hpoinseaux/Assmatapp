@@ -7,7 +7,7 @@ import os
 import json
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload, MediaIoBaseUpload
 import tempfile
 import xlsxwriter
 import io
@@ -236,15 +236,15 @@ if st.session_state.get('authentication_status'):
         remarque = st.text_input("Observation", key="repas_remarque")
         col1, col2, col3, col4, col5 = st.columns(5)
         if col1.button("🍲 Repas"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
         if col2.button("📄 Début sieste"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
         if col3.button("🌞 Fin sieste"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Fin Sieste", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Fin Sieste", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
         if col4.button("🧷 Change"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
         if col5.button("🍎 Goûter"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
 
         save_csv_to_drive(df, fichier_csv)
 
@@ -321,7 +321,8 @@ if st.session_state.get('authentication_status'):
 
                 file_buffer = io.BytesIO(uploaded_photo.read())
                 file_buffer.seek(0)
-                media = MediaFileUpload(file_buffer, mimetype=uploaded_photo.type, resumable=True)
+                media = MediaIoBaseUpload(file_buffer, mimetype=uploaded_photo.type, resumable=True)  # ✅ bon uploader
+
                 file_metadata = {
                     'name': uploaded_photo.name,
                     'parents': [folder_id_enfant]
