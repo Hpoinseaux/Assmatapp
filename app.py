@@ -173,8 +173,8 @@ dossier_photos = "photos"  # ou le dossier cible
 os.makedirs(dossier_photos, exist_ok=True)
 
 parent_enfants = {
-    "Parent Caly": "Caly",
-    "Parent Nate": "Nate"
+    "parent_caly": "Caly",
+    "parent_nate": "Nate"
 }
 tz = timezone('Europe/Paris') 
 authenticator = stauth.Authenticate(credentials, "babyapp_cookie", "random_key", cookie_expiry_days=30)
