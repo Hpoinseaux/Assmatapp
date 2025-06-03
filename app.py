@@ -4,8 +4,9 @@ from datetime import datetime, timedelta, time
 import pandas as pd
 import calendar
 import os
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 import tempfile
 import xlsxwriter
 
@@ -46,29 +47,28 @@ st.markdown(
 )
 
 # 🌐 Authentification Google Drive
-def init_drive():
-    # Écrire le fichier credentials.json à partir des secrets
-    if not os.path.exists("credentials.json"):
-        with open("credentials.json", "w") as f:
-            f.write(st.secrets["google"]["credentials_json"])
+def get_drive_service():
+    creds_dict = json.loads(st.secrets["google"]["credentials_json"])
+    creds = service_account.Credentials.from_service_account_info(
+        creds_dict,
+        scopes=["https://www.googleapis.com/auth/drive"]
+    )
+    return build("drive", "v3", credentials=creds)
 
-    gauth = GoogleAuth()
-    gauth.LoadCredentialsFile("credentials.json")
-    
-    if gauth.credentials is None:
-        gauth.LocalWebserverAuth()
-    elif gauth.access_token_expired:
-        gauth.Refresh()
-    else:
-        gauth.Authorize()
-    
-    gauth.SaveCredentialsFile("credentials.json")
-    return GoogleDrive(gauth)
-
-drive = init_drive()
-
-# ID du dossier Google Drive à utiliser
-FOLDER_ID = "1DIWaCkgrQ09ra3lP6SHXG43bGnTyC6B2"
+# Exemple : upload d'un fichier dans un dossier spécifique
+def upload_to_drive(file_path, file_name):
+    drive_service = get_drive_service()
+    file_metadata = {
+        "name": file_name,
+        "parents": [st.secrets["google"]["folder_id"]],
+    }
+    media = MediaFileUpload(file_path, resumable=True)
+    uploaded_file = drive_service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields="id"
+    ).execute()
+    return uploaded_file.get("id")
 
 # 📁 Fonctions utilitaires Google Drive
 def get_file_from_drive(filename):
