@@ -1,10 +1,13 @@
 import streamlit as st
 import streamlit_authenticator as stauth
-from datetime import datetime, time, timedelta
+from datetime import datetime, timedelta, time
 import pandas as pd
 import calendar
-import xlsxwriter
 import os
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+import tempfile
+import xlsxwriter
 
 # 🌈 Personnalisation du style
 st.markdown(
@@ -42,7 +45,45 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 🔐 Authentification
+# 🌐 Authentification Google Drive
+def init_drive():
+    gauth = GoogleAuth()
+    gauth.LoadCredentialsFile("credentials.json")
+    if gauth.credentials is None:
+        gauth.LocalWebserverAuth()
+    elif gauth.access_token_expired:
+        gauth.Refresh()
+    else:
+        gauth.Authorize()
+    gauth.SaveCredentialsFile("credentials.json")
+    return GoogleDrive(gauth)
+
+drive = init_drive()
+FOLDER_ID = "1DIWaCkgrQ09ra3lP6SHXG43bGnTyC6B2"
+
+# 📁 Fonctions utilitaires Google Drive
+def get_file_from_drive(filename):
+    file_list = drive.ListFile({'q': f"'{FOLDER_ID}' in parents and trashed=false and title='{filename}'"}).GetList()
+    if file_list:
+        file_drive = file_list[0]
+        content = file_drive.GetContentString()
+        return pd.read_csv(pd.compat.StringIO(content))
+    return pd.DataFrame()
+
+def save_csv_to_drive(df, filename):
+    file_list = drive.ListFile({'q': f"'{FOLDER_ID}' in parents and trashed=false and title='{filename}'"}).GetList()
+    temp = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
+    df.to_csv(temp.name, index=False)
+    if file_list:
+        file_drive = file_list[0]
+        file_drive.SetContentFile(temp.name)
+        file_drive.Upload()
+    else:
+        new_file = drive.CreateFile({'title': filename, 'parents': [{'id': FOLDER_ID}]})
+        new_file.SetContentFile(temp.name)
+        new_file.Upload()
+
+# 🔐 Authentification utilisateur
 credentials = {
     "usernames": {
         "nounou": {
@@ -60,12 +101,16 @@ credentials = {
     }
 }
 
-# 📂 Chemins des fichiers
-fichier = st.secrets["files"]["suivi_csv"]
-fichier_presence = st.secrets["files"]["presence_csv"]
-dossier_photos = st.secrets["files"]["photos_dir"]
+fichier_csv = "suivi.csv"
+fichier_presence_csv = "presence.csv"
 
-parent_enfants = {"Caly": "Caly", "Nate": "Nate"}
+dossier_photos = "photos"  # ou le dossier cible
+os.makedirs(dossier_photos, exist_ok=True)
+
+parent_enfants = {
+    "Parent Caly": "Caly",
+    "Parent Nate": "Nate"
+}
 
 authenticator = stauth.Authenticate(credentials, "babyapp_cookie", "random_key", cookie_expiry_days=30)
 try:
@@ -79,16 +124,13 @@ if st.session_state.get('authentication_status'):
     name = st.session_state.get("name")
     role = "Nounou" if name == "Nounou" else "Parent"
 
-    if os.path.exists(fichier):
-        df = pd.read_csv(fichier)
-    else:
+    df = get_file_from_drive(fichier_csv)
+    df_presence = get_file_from_drive(fichier_presence_csv)
+
+    if df.empty:
         df = pd.DataFrame(columns=["Nom", "Activité", "Heure", "observation"])
-
-    if os.path.exists(fichier_presence):
-        df_presence = pd.read_csv(fichier_presence)
-    else:
+    if df_presence.empty:
         df_presence = pd.DataFrame(columns=["Nom", "Date", "Arrivée", "Départ", "Durée"])
-
     # 👉 Partie Nounou
     if role == "Nounou":
         nom = st.selectbox("Choisir l'enfant ⬇", ["Caly", "Nate"])
@@ -104,7 +146,7 @@ if st.session_state.get('authentication_status'):
                 "Départ": "",
                 "Durée": ""
             }])], ignore_index=True)
-            df_presence.to_csv(fichier_presence, index=False)
+            save_csv_to_drive(df_presence, fichier_presence_csv)
             st.success(f"Arrivée enregistrée à {heure}")
 
         if st.button("👋 Heure de départ"):
@@ -122,7 +164,7 @@ if st.session_state.get('authentication_status'):
                     st.error(f"Erreur de calcul : {e}")
                 df_presence["Départ"] = df_presence["Départ"].astype(str)
                 df_presence["Durée"] = df_presence["Durée"].astype(str)
-                df_presence.to_csv(fichier_presence, index=False)
+                save_csv_to_drive(df_presence, fichier_presence_csv)
                 st.success(f"Départ enregistré à {heure_depart}")
             else:
                 st.warning("Aucune heure d'arrivée trouvée pour aujourd'hui.")
@@ -140,7 +182,7 @@ if st.session_state.get('authentication_status'):
         if col5.button("🍎 Goûter"):
             df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": datetime.now().strftime("%Y-%m-%d %H:%M"), "observation": remarque}])], ignore_index=True)
 
-        df.to_csv(fichier, index=False)
+        save_csv_to_drive(df, fichier_csv)
 
         st.subheader("📜 Historique du jour")
         try:
@@ -161,7 +203,7 @@ if st.session_state.get('authentication_status'):
                     "Heure": datetime.now().strftime("%d/%m/%Y %H:%M"),
                     "observation": besoins
                 }])], ignore_index=True)
-                df.to_csv(fichier, index=False)
+                save_csv_to_drive(df, fichier_csv)
                 st.success("Besoin enregistré avec succès ✅")
             else:
                 st.warning("Le champ de besoin est vide.")
@@ -170,8 +212,8 @@ if st.session_state.get('authentication_status'):
         mois = st.selectbox("Choisir un mois", list(range(1, 13)), format_func=lambda x: calendar.month_name[x])
         annee = st.selectbox("Choisir une année", list(range(2025, datetime.now().year + 1)))
         if st.button("📦 Générer le fichier Excel du mois"):
-            if os.path.exists(fichier_presence):
-                df_presence = pd.read_csv(fichier_presence)
+            if not df_presence.empty:
+                df_presence = get_file_from_drive(fichier_presence_csv)
                 df_presence["Date"] = pd.to_datetime(df_presence["Date"], errors="coerce")
                 df_presence["Durée"] = pd.to_timedelta(df_presence["Durée"], errors="coerce")
                 df_presence["Durée_excel"] = df_presence["Durée"].dt.total_seconds() / 86400
@@ -199,7 +241,7 @@ if st.session_state.get('authentication_status'):
                             worksheet.write_formula(total_row, 3, f'=SUM(D2:D{total_row})', format_duree)
                     st.success(f"Fichier Excel généré : {nom_fichier}")
                     with open(nom_fichier, "rb") as f:
-                        st.download_button("📅 Télécharger le fichier", f, nom_fichier)
+                        st.download_button("📅 Télécharger le fichier", f.read(), nom_fichier)
                 else:
                     st.warning("Aucune donnée pour ce mois.")
             else:
