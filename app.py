@@ -339,7 +339,7 @@ if st.session_state.get('authentication_status'):
         dates_disponibles = sorted(df_now["Date"].dt.date.unique(), reverse=True)
         date_selectionnee = st.selectbox("Choisir une date :", dates_disponibles)
         maintenant = datetime.now().time()
-        heure_visibilite = time(17, 0)
+        heure_visibilite = time(8, 0)
 
         if maintenant >= heure_visibilite:
             df_presence["Date"] = pd.to_datetime(df_presence["Date"]).dt.date
