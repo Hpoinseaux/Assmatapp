@@ -47,18 +47,27 @@ st.markdown(
 
 # 🌐 Authentification Google Drive
 def init_drive():
+    # Écrire le fichier credentials.json à partir des secrets
+    if not os.path.exists("credentials.json"):
+        with open("credentials.json", "w") as f:
+            f.write(st.secrets["google"]["credentials_json"])
+
     gauth = GoogleAuth()
     gauth.LoadCredentialsFile("credentials.json")
+    
     if gauth.credentials is None:
         gauth.LocalWebserverAuth()
     elif gauth.access_token_expired:
         gauth.Refresh()
     else:
         gauth.Authorize()
+    
     gauth.SaveCredentialsFile("credentials.json")
     return GoogleDrive(gauth)
 
 drive = init_drive()
+
+# ID du dossier Google Drive à utiliser
 FOLDER_ID = "1DIWaCkgrQ09ra3lP6SHXG43bGnTyC6B2"
 
 # 📁 Fonctions utilitaires Google Drive
