@@ -11,6 +11,7 @@ from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload, MediaIoBa
 import tempfile
 import xlsxwriter
 import io
+from pytz import timezone
 
 # 🌈 Personnalisation du style
 st.markdown(
@@ -175,7 +176,7 @@ parent_enfants = {
     "Parent Caly": "Caly",
     "Parent Nate": "Nate"
 }
-
+tz = timezone('Europe/Paris') 
 authenticator = stauth.Authenticate(credentials, "babyapp_cookie", "random_key", cookie_expiry_days=30)
 try:
     authenticator.login()
@@ -198,10 +199,10 @@ if st.session_state.get('authentication_status'):
     # 👉 Partie Nounou
     if role == "Nounou":
         nom = st.selectbox("Choisir l'enfant ⬇", ["Caly", "Nate"])
-        aujourdhui = datetime.now().strftime("%d/%m/%Y")
+        aujourdhui = datetime.now(tz).strftime("%d/%m/%Y")
 
         if st.button("👋 Heure d'arrivée"):
-            heure = datetime.now().strftime("%H:%M")
+            heure = datetime.now(tz).strftime("%H:%M")
             df_presence = df_presence[~((df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui)))]
             df_presence = pd.concat([df_presence, pd.DataFrame([{
                 "Nom": nom,
@@ -214,7 +215,7 @@ if st.session_state.get('authentication_status'):
             st.success(f"Arrivée enregistrée à {heure}")
 
         if st.button("👋 Heure de départ"):
-            heure_depart = datetime.now().strftime("%H:%M")
+            heure_depart = datetime.now(tz).strftime("%H:%M")
             index = df_presence[(df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui))].index
             if not index.empty:
                 idx = index[0]
@@ -236,15 +237,15 @@ if st.session_state.get('authentication_status'):
         remarque = st.text_input("Observation", key="repas_remarque")
         col1, col2, col3, col4, col5 = st.columns(5)
         if col1.button("🍲 Repas"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
         if col2.button("📄 Début sieste"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
         if col3.button("🌞 Fin sieste"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Fin Sieste", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Fin Sieste", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
         if col4.button("🧷 Change"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
         if col5.button("🍎 Goûter"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": datetime.now().strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
 
         save_csv_to_drive(df, fichier_csv)
 
@@ -264,7 +265,7 @@ if st.session_state.get('authentication_status'):
                 df = pd.concat([df, pd.DataFrame([{
                     "Nom": nom,
                     "Activité": "Besoins",
-                    "Heure": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                    "Heure": datetime.now(tz).strftime("%d/%m/%Y %H:%M"),
                     "observation": besoins
                 }])], ignore_index=True)
                 save_csv_to_drive(df, fichier_csv)
@@ -339,7 +340,7 @@ if st.session_state.get('authentication_status'):
         df_now = df_presence[df_presence["Nom"] == enfant]
         dates_disponibles = sorted(df_now["Date"].dt.date.unique(), reverse=True)
         date_selectionnee = st.selectbox("Choisir une date :", dates_disponibles)
-        maintenant = datetime.now().time()
+        maintenant = datetime.now(tz).time()
         heure_visibilite = time(8, 0)
 
         if maintenant >= heure_visibilite:
