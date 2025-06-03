@@ -236,7 +236,7 @@ if st.session_state.get('authentication_status'):
 
         remarque = st.text_input("Observation", key="repas_remarque")
         col1, col2, col3, col4, col5 = st.columns(5)
-        date_heure = datetime.now(tz).strftime("%d-%m-%Y %H:%M")
+        date_heure = datetime.now(tz).strftime("%d/%m/%Y %H:%M")
         if col1.button("🍲 Repas"):
             df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col2.button("📄 Début sieste"):
@@ -252,7 +252,7 @@ if st.session_state.get('authentication_status'):
 
         st.subheader("📜 Historique du jour")
         try:
-            df["Heure"] = pd.to_datetime(df["Heure"], errors="coerce", dayfirst=False)
+            df["Heure"] = pd.to_datetime(df["Heure"], format= "%d/%m/%Y %H:%M", errors="coerce", dayfirst=False)
         except Exception as e:
             st.error(f"Erreur de conversion des dates : {e}")
 
@@ -337,7 +337,7 @@ if st.session_state.get('authentication_status'):
         st.subheader(f"📜 Historique de {enfant}")
         df["Heure"] = pd.to_datetime(df["Heure"], format="%d/%m/%Y %H:%M", errors="coerce")
         df_enfant = df[df["Nom"] == enfant]
-        df_presence["Date"] = pd.to_datetime(df_presence["Date"])
+        df_presence["Date"] = pd.to_datetime(df_presence["Date"], format="%d/%m/%Y", errors="coerce")
         df_now = df_presence[df_presence["Nom"] == enfant]
         dates_disponibles = sorted(df_now["Date"].dt.date.unique(), reverse=True)
         date_selectionnee = st.selectbox("Choisir une date :", dates_disponibles)
