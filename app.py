@@ -236,16 +236,17 @@ if st.session_state.get('authentication_status'):
 
         remarque = st.text_input("Observation", key="repas_remarque")
         col1, col2, col3, col4, col5 = st.columns(5)
+        date_heure = datetime.now(tz).strftime("%d-%m-%Y %H:%M")
         if col1.button("🍲 Repas"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col2.button("📄 Début sieste"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Début Sieste", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col3.button("🌞 Fin sieste"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Fin Sieste", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Fin Sieste", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col4.button("🧷 Change"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col5.button("🍎 Goûter"):
-            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": datetime.now(tz).strftime("%d-%m-%Y %H:%M"), "observation": remarque}])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
 
         save_csv_to_drive(df, fichier_csv)
 
