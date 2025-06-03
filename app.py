@@ -100,6 +100,51 @@ def save_csv_to_drive(df, filename):
                 'mimeType': 'text/csv'
             }
             drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+# Fonction pour créer/obtenir dossier parent sur Drive
+# Récupérer ou créer un dossier enfant dans Drive
+def get_or_create_child_folder(child_name):
+    drive_service = get_drive_service()
+    parent_drive_folder_id = st.secrets["google"]["folder_photos_root"]
+    query = f"name = '{child_name}' and mimeType = 'application/vnd.google-apps.folder' and '{parent_drive_folder_id}' in parents and trashed=false"
+    results = drive_service.files().list(q=query, spaces='drive', fields="files(id, name)").execute()
+    folders = results.get('files', [])
+    if folders:
+        return folders[0]['id']
+    else:
+        folder_metadata = {
+            'name': child_name,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'parents': [parent_drive_folder_id]
+        }
+        folder = drive_service.files().create(body=folder_metadata, fields='id').execute()
+        return folder.get('id')
+# Upload photo dans dossier parent
+def upload_photo_to_parent_folder(uploaded_file, parent_folder_id):
+    file_buffer = io.BytesIO(uploaded_file.read())
+    file_buffer.seek(0)
+    media = MediaIoBaseUpload(file_buffer, mimetype=uploaded_file.type, resumable=True)
+    file_metadata = {
+        'name': uploaded_file.name,
+        'parents': [parent_folder_id]
+    }
+    file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+    return file.get('id')
+
+def list_files_in_drive_folder(service, folder_id):
+    query = f"'{folder_id}' in parents and trashed=false"
+    results = service.files().list(
+        q=query,
+        fields="files(id, name, mimeType)").execute()
+    return results.get('files', [])
+
+def download_file(service, file_id, destination):
+    request = service.files().get_media(fileId=file_id)
+    fh = open(destination, "wb")
+    downloader = MediaIoBaseDownload(fh, request)
+    done = False
+    while done is False:
+        status, done = downloader.next_chunk()
+    fh.close()
 
 # 🔐 Authentification utilisateur
 credentials = {
@@ -267,15 +312,22 @@ if st.session_state.get('authentication_status'):
                 st.error("Le fichier de présence n'existe pas encore.")
 
         st.subheader("📷 Ajouter une photo pour l'enfant")
-        uploaded_photo = st.file_uploader("Choisir une photo", type=["jpg", "jpeg", "png"])
-        if uploaded_photo:
-            enfant_folder = os.path.join(dossier_photos, nom)
-            os.makedirs(enfant_folder, exist_ok=True)
-            photo_path = os.path.join(enfant_folder, uploaded_photo.name)
-            with open(photo_path, "wb") as f:
-                f.write(uploaded_photo.getbuffer())
-            st.success(f"Photo ajoutée pour {nom} 📸")
+        # Assure-toi que la variable `nom` est bien définie et non vide
+        if nom:
+            uploaded_photo = st.file_uploader("Choisir une photo", type=["jpg", "jpeg", "png"])
+            if uploaded_photo:
+                drive_service = get_drive_service()
+                folder_id_enfant = get_or_create_child_folder(nom)
 
+                file_buffer = io.BytesIO(uploaded_photo.read())
+                file_buffer.seek(0)
+                media = MediaFileUpload(file_buffer, mimetype=uploaded_photo.type, resumable=True)
+                file_metadata = {
+                    'name': uploaded_photo.name,
+                    'parents': [folder_id_enfant]
+                }
+                file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+                st.success(f"Photo ajoutée pour {nom} 📸 (ID : {file.get('id')})")
     # 👉 Partie Parent
     elif role == "Parent":
         enfant = parent_enfants.get(name)
@@ -310,20 +362,29 @@ if st.session_state.get('authentication_status'):
                     st.markdown(f"➡️  **{row['observation']}**")
 
         st.subheader(f"📸 Photos de {enfant}")
-        enfant_folder = os.path.join(dossier_photos, enfant)
-        if os.path.exists(enfant_folder):
-            photos = os.listdir(enfant_folder)
-            if photos:
-                for photo in photos:
-                    file_path = os.path.join(enfant_folder, photo)
-                    with open(file_path, "rb") as f:
-                        img_bytes = f.read()
-                        st.image(img_bytes, caption=photo, use_container_width=True)
-                        st.download_button("📸  Télécharger", img_bytes, file_name=photo)
-            else:
-                st.info("Aucune photo disponible pour aujourd'hui.")
+        drive_service = get_drive_service()
+        folder_id_enfant = get_or_create_child_folder(enfant)
+
+        files = list_files_in_drive_folder(drive_service, folder_id_enfant)
+        if files:
+            for file in files:
+                file_id = file['id']
+                file_name = file['name']
+
+                request = drive_service.files().get_media(fileId=file_id)
+                fh = io.BytesIO()
+                downloader = MediaIoBaseDownload(fh, request)
+                done = False
+                while not done:
+                    status, done = downloader.next_chunk()
+                fh.seek(0)
+
+                st.image(fh.read(), caption=file_name, use_container_width=True)
+                fh.seek(0)
+                st.download_button("📸 Télécharger", fh, file_name=file_name)
         else:
-            st.info("Aucune photo disponible.")
+            st.info("Aucune photo disponible pour cet enfant.")
+
 elif st.session_state.get('authentication_status') is False:
     st.error('Nom d’utilisateur ou mot de passe incorrect')
 elif st.session_state.get('authentication_status') is None:
