@@ -1,9 +1,7 @@
 streamlit==1.45.1
-streamlit_authenticator==0.4.2
+streamlit-authenticator==0.4.2
 pandas==2.2.3
-datetime
-pydrive
-xlsxwriter
-google-api-python-client
-google-auth
-google-auth-oauthlib
+xlsxwriter==3.2.0
+google-api-python-client==2.130.0
+google-auth==2.29.0
+google-auth-oauthlib==1.2.0

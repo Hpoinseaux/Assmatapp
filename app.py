@@ -4,11 +4,13 @@ from datetime import datetime, timedelta, time
 import pandas as pd
 import calendar
 import os
+import json
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 import tempfile
 import xlsxwriter
+import io
 
 # 🌈 Personnalisation du style
 st.markdown(
@@ -55,42 +57,49 @@ def get_drive_service():
     )
     return build("drive", "v3", credentials=creds)
 
-# Exemple : upload d'un fichier dans un dossier spécifique
-def upload_to_drive(file_path, file_name):
-    drive_service = get_drive_service()
-    file_metadata = {
-        "name": file_name,
-        "parents": [st.secrets["google"]["folder_id"]],
-    }
-    media = MediaFileUpload(file_path, resumable=True)
-    uploaded_file = drive_service.files().create(
-        body=file_metadata,
-        media_body=media,
-        fields="id"
-    ).execute()
-    return uploaded_file.get("id")
-
 # 📁 Fonctions utilitaires Google Drive
 def get_file_from_drive(filename):
-    file_list = drive.ListFile({'q': f"'{FOLDER_ID}' in parents and trashed=false and title='{filename}'"}).GetList()
-    if file_list:
-        file_drive = file_list[0]
-        content = file_drive.GetContentString()
-        return pd.read_csv(pd.compat.StringIO(content))
-    return pd.DataFrame()
+    drive_service = get_drive_service()
+    folder_id = st.secrets["google"]["folder_id"]
+    query = f"'{folder_id}' in parents and trashed = false and name = '{filename}'"
+    results = drive_service.files().list(q=query, spaces='drive', fields="files(id, name)").execute()
+    items = results.get('files', [])
+    if not items:
+        return pd.DataFrame()
+
+    file_id = items[0]['id']
+    request = drive_service.files().get_media(fileId=file_id)
+    fh = io.BytesIO()
+    downloader = MediaIoBaseDownload(fh, request)
+    done = False
+    while not done:
+        status, done = downloader.next_chunk()
+
+    fh.seek(0)
+    return pd.read_csv(fh)
 
 def save_csv_to_drive(df, filename):
-    file_list = drive.ListFile({'q': f"'{FOLDER_ID}' in parents and trashed=false and title='{filename}'"}).GetList()
-    temp = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
-    df.to_csv(temp.name, index=False)
-    if file_list:
-        file_drive = file_list[0]
-        file_drive.SetContentFile(temp.name)
-        file_drive.Upload()
-    else:
-        new_file = drive.CreateFile({'title': filename, 'parents': [{'id': FOLDER_ID}]})
-        new_file.SetContentFile(temp.name)
-        new_file.Upload()
+    drive_service = get_drive_service()
+    folder_id = st.secrets["google"]["folder_id"]
+
+    query = f"'{folder_id}' in parents and trashed = false and name = '{filename}'"
+    results = drive_service.files().list(q=query, spaces='drive', fields="files(id, name)").execute()
+    items = results.get('files', [])
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as temp:
+        df.to_csv(temp.name, index=False)
+        media = MediaFileUpload(temp.name, mimetype='text/csv')
+
+        if items:
+            file_id = items[0]['id']
+            drive_service.files().update(fileId=file_id, media_body=media).execute()
+        else:
+            file_metadata = {
+                'name': filename,
+                'parents': [folder_id],
+                'mimeType': 'text/csv'
+            }
+            drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
 
 # 🔐 Authentification utilisateur
 credentials = {
@@ -109,6 +118,7 @@ credentials = {
         }
     }
 }
+
 
 fichier_csv = "suivi.csv"
 fichier_presence_csv = "presence.csv"
