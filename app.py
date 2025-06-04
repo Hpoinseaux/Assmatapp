@@ -315,7 +315,9 @@ if st.session_state.get('authentication_status'):
 
         st.subheader("📷 Ajouter une photo pour l'enfant")
         # Assure-toi que la variable `nom` est bien définie et non vide
-        if nom:
+        if "upload_done" not in st.session_state:
+            st.session_state.upload_done = False
+        if nom and not st.session_state.upload_done:
             uploaded_photo = st.file_uploader("Choisir une photo", type=["jpg", "jpeg", "png"])
             if uploaded_photo:
                 drive_service = get_drive_service()
