@@ -343,17 +343,25 @@ if st.session_state.get('authentication_status'):
         df_now = df_presence[df_presence["Nom"] == enfant]
         dates_disponibles = sorted(df_now["Date"].dt.date.unique(), reverse=True)
         date_selectionnee = st.selectbox("Choisir une date :", dates_disponibles)
-        maintenant = datetime.now(tz).time()
+        maintenant = datetime.now(tz)
+        date_aujourdhui = maintenant.date()
         heure_visibilite = time(17, 0)
 
-        if maintenant >= heure_visibilite:
+         # Condition principale
+        peut_voir_infos = (
+            date_selectionnee < date_aujourdhui or 
+            (date_selectionnee == date_aujourdhui and maintenant.time() >= heure_visibilite)
+        )
+
+        if peut_voir_infos:
             df_presence["Date"] = pd.to_datetime(df_presence["Date"]).dt.date
             df_pres = df_presence[(df_presence["Nom"] == enfant) & (df_presence["Date"] == date_selectionnee)]
             if not df_pres.empty:
                 st.subheader(f"⏰ Présences du {date_selectionnee.strftime('%d/%m/%Y')}")
                 st.dataframe(df_pres[["Arrivée", "Départ", "Durée"]])
             else:
-                st.info("Aucune donnée de présence pour la date sélectionnée.")
+                st.info("⏳ Les informations pour aujourd’hui seront disponibles à partir de 17h00.")
+
 
             df_jour = df_enfant[df_enfant["Heure"].dt.date == date_selectionnee]
             df_jour["Heure"] = df_jour["Heure"].dt.strftime("%H:%M")
