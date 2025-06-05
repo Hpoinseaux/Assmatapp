@@ -354,7 +354,7 @@ if st.session_state.get('authentication_status'):
         )
 
         if peut_voir_infos:
-            df_presence["Date"] = pd.to_datetime(df_presence["Date"]).dt.date
+            df_presence["Date"] = df_presence["Date"].dt.date
             df_pres = df_presence[(df_presence["Nom"] == enfant) & (df_presence["Date"] == date_selectionnee)]
             if not df_pres.empty:
                 st.subheader(f"⏰ Présences du {date_selectionnee.strftime('%d/%m/%Y')}")
