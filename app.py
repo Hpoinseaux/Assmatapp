@@ -235,7 +235,7 @@ if st.session_state.get('authentication_status'):
                 st.warning("Aucune heure d'arrivée trouvée pour aujourd'hui.")
 
         remarque = st.text_input("Observation", key="repas_remarque")
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3, col4, col5, col6 = st.columns(6)
         date_heure = datetime.now(tz).strftime("%d/%m/%Y %H:%M")
         if col1.button("🍲 Repas"):
             df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
@@ -247,6 +247,8 @@ if st.session_state.get('authentication_status'):
             df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Change", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col5.button("🍎 Goûter"):
             df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Goûter", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
+        if col6.button("💊 Soins"):  # ← Nouveau bouton
+            df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Soins", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
 
         save_csv_to_drive(df, fichier_csv)
 
@@ -256,9 +258,19 @@ if st.session_state.get('authentication_status'):
         except Exception as e:
             st.error(f"Erreur de conversion des dates : {e}")
 
-        df["Heure"] = df["Heure"].dt.strftime("%d/%m/%Y %H:%M")
-        st.dataframe(df.sort_values(by="Heure", ascending=False))
+        # Filtrage par jour et enfant sélectionné
+        aujourdhui = datetime.now(tz).date()
+        df_jour = df[(df["Heure"].dt.date == aujourdhui) & (df["Nom"] == nom)]
 
+        # Format heure pour affichage
+        df_jour["Heure"] = df_jour["Heure"].dt.strftime("%d/%m/%Y %H:%M")
+
+        # Affichage ou message vide
+        if not df_jour.empty:
+            st.dataframe(df_jour.sort_values(by="Heure", ascending=False))
+        else:
+            st.info("Aucune activité enregistrée aujourd’hui pour cet enfant.")
+            
         st.subheader("🗘️ Besoins de la journée")
         besoins = st.text_area("Écrire un besoin à signaler aux parents")
         if st.button("✅ Enregistrer le besoin"):
