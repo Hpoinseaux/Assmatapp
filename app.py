@@ -202,7 +202,7 @@ if st.session_state.get('authentication_status'):
         aujourdhui = datetime.now(tz).strftime("%d/%m/%Y")
 
         if st.button("👋 Heure d'arrivée"):
-            heure = datetime.now(tz).strftime("%H:%M")
+            heure = st.time_input("Heure d'arrivée")
             df_presence = df_presence[~((df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui)))]
             df_presence = pd.concat([df_presence, pd.DataFrame([{
                 "Nom": nom,
@@ -215,7 +215,7 @@ if st.session_state.get('authentication_status'):
             st.success(f"Arrivée enregistrée à {heure}")
 
         if st.button("👋 Heure de départ"):
-            heure_depart = datetime.now(tz).strftime("%H:%M")
+            heure_depart = st.time_input("Heure de départ")
             index = df_presence[(df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui))].index
             if not index.empty:
                 idx = index[0]
@@ -235,8 +235,9 @@ if st.session_state.get('authentication_status'):
                 st.warning("Aucune heure d'arrivée trouvée pour aujourd'hui.")
 
         remarque = st.text_input("Observation", key="repas_remarque")
+        heure_obs = st.time_input("Heure de l'observation", value=datetime.now().time())
         col1, col2, col3, col4, col5, col6 = st.columns(6)
-        date_heure = datetime.now(tz).strftime("%d/%m/%Y %H:%M")
+        date_heure = datetime.combine(date.today(), heure_obs).strftime("%d/%m/%Y %H:%M")
         if col1.button("🍲 Repas"):
             df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col2.button("📄 Début sieste"):
@@ -403,9 +404,7 @@ if st.session_state.get('authentication_status'):
                 while not done:
                     status, done = downloader.next_chunk()
                 fh.seek(0)
-
                 st.image(fh.read(), caption=file_name, use_container_width=True)
-                fh.seek(0)
                 st.download_button("📸 Télécharger", fh, file_name=file_name)
         else:
             st.info("Aucune photo disponible pour cet enfant.")
