@@ -201,8 +201,9 @@ if st.session_state.get('authentication_status'):
         nom = st.selectbox("Choisir l'enfant ⬇", ["Caly", "Nate"])
         aujourdhui = datetime.now(tz).strftime("%d/%m/%Y")
 
+        choix_heure = st.time_input("Heure d'arrivée")
         if st.button("👋 Heure d'arrivée"):
-            heure = st.time_input("Heure d'arrivée")
+            heure = choix_heure
             df_presence = df_presence[~((df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui)))]
             df_presence = pd.concat([df_presence, pd.DataFrame([{
                 "Nom": nom,
