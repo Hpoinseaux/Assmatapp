@@ -237,10 +237,9 @@ if st.session_state.get('authentication_status'):
                 st.warning("Aucune heure d'arrivée trouvée pour aujourd'hui.")
 
         remarque = st.text_input("Observation", key="repas_remarque")
-        heure_obs = st.time_input("Heure de l'observation", value=datetime.now().time())
         date_obs = date.today()
         col1, col2, col3, col4, col5, col6 = st.columns(6)
-        date_heure = datetime.combine(date_obs, heure_obs).strftime("%d/%m/%Y %H:%M")
+        date_heure = datetime.combine(date_obs, choix_heure).strftime("%d/%m/%Y %H:%M")
         if col1.button("🍲 Repas"):
             df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col2.button("📄 Début sieste"):
