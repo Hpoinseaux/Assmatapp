@@ -203,7 +203,7 @@ if st.session_state.get('authentication_status'):
 
         choix_heure = st.time_input("Heure")
         if st.button("👋 Heure d'arrivée"):
-            heure = choix_heure
+            heure = choix_heure.strftime("%H:%M")
             df_presence = df_presence[~((df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui)))]
             df_presence = pd.concat([df_presence, pd.DataFrame([{
                 "Nom": nom,
@@ -217,7 +217,7 @@ if st.session_state.get('authentication_status'):
 
         
         if st.button("👋 Heure de départ"):
-            heure_depart = choix_heure
+            heure_depart = choix_heure.strftime("%H:%M")
             index = df_presence[(df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui))].index
             if not index.empty:
                 idx = index[0]
