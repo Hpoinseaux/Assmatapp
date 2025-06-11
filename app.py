@@ -1,6 +1,6 @@
 import streamlit as st
 import streamlit_authenticator as stauth
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, date
 import pandas as pd
 import calendar
 import os
@@ -201,7 +201,7 @@ if st.session_state.get('authentication_status'):
         nom = st.selectbox("Choisir l'enfant ⬇", ["Caly", "Nate"])
         aujourdhui = datetime.now(tz).strftime("%d/%m/%Y")
 
-        choix_heure = st.time_input("Heure d'arrivée")
+        choix_heure = st.time_input("Heure")
         if st.button("👋 Heure d'arrivée"):
             heure = choix_heure
             df_presence = df_presence[~((df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui)))]
@@ -215,8 +215,9 @@ if st.session_state.get('authentication_status'):
             save_csv_to_drive(df_presence, fichier_presence_csv)
             st.success(f"Arrivée enregistrée à {heure}")
 
+        
         if st.button("👋 Heure de départ"):
-            heure_depart = st.time_input("Heure de départ")
+            heure_depart = choix_heure
             index = df_presence[(df_presence["Nom"] == nom) & (df_presence["Date"] == str(aujourdhui))].index
             if not index.empty:
                 idx = index[0]
@@ -237,8 +238,9 @@ if st.session_state.get('authentication_status'):
 
         remarque = st.text_input("Observation", key="repas_remarque")
         heure_obs = st.time_input("Heure de l'observation", value=datetime.now().time())
+        date_obs = date.today()
         col1, col2, col3, col4, col5, col6 = st.columns(6)
-        date_heure = datetime.combine(date.today(), heure_obs).strftime("%d/%m/%Y %H:%M")
+        date_heure = datetime.combine(date_obs, heure_obs).strftime("%d/%m/%Y %H:%M")
         if col1.button("🍲 Repas"):
             df = pd.concat([df, pd.DataFrame([{"Nom": nom, "Activité": "Repas", "Heure": date_heure, "observation": remarque}])], ignore_index=True)
         if col2.button("📄 Début sieste"):
